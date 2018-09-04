@@ -55,11 +55,13 @@ def get_my_bundlelist():
 
 def get_bundle_state():
     id_field_idx = 3
+    version_field_idx = 4
     m = hashlib.md5()
     bundles = get_my_bundlelist()
     bids = []
     for i in bundles['rows']:
         bids.append(i[id_field_idx])
+        bids.append(str(i[version_field_idx]))
 
     for i in sorted(bids):
         m.update(i)
@@ -105,7 +107,7 @@ try:
                     pass
                 else:
                     print "ANNOUNCE: %s %s %s %s - sync required" % (fields[1], fields[2], fields[3], fields[4])
-                    subprocess.call("servald rhizome direct sync http://%s:%s" % (fields[2], fields[3]), shell=True)
+                    subprocess.call("servald rhizome direct pull http://%s:%s" % (fields[2], fields[3]), shell=True)
 except:
     print "ending receive thread "
     please_run = False
